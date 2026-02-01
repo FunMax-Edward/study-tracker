@@ -1,0 +1,8 @@
+Study Tracker is a lightweight Android application designed to help you quantify your learning efforts. Organize your studies into hierarchical projects (e.g., courses, units), log your study time, and view your progress through intuitive statistics.
+
+Key Features:
+- Hierarchical project management.
+- Progress tracking with automatic completion calculation.
+- Statistical analysis with built-in charts.
+- Local storage using Room database for privacy and speed.
+- Modern UI with Jetpack Compose and Dark Mode support.
