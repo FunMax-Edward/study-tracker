@@ -53,20 +53,19 @@ class ProjectRepository(private val database: AppDatabase) {
     suspend fun recordProblemAttempt(problem: Problem, isCorrect: Boolean) {
         val currentLevel = problem.proficiencyLevel
         val newLevel = if (isCorrect) {
-            // 做对：逐级变浅/变好
             when (currentLevel) {
-                0 -> 5      // 灰色 → 浅绿（第一次做对直接绿）
-                1 -> 0      // 浅红 → 灰色（重新来）
-                2 -> 1      // 中红 → 浅红（降级）
-                3 -> 2      // 深红 → 中红（降级）
-                4 -> 3      // 最深红 → 深红（降级）
-                5, 6 -> 5   // 浅绿/深绿保持
+                0 -> 5      // 灰色 → 浅绿
+                1 -> 5      // 浅红 → 浅绿（跳过灰色）
+                2 -> 1      // 中红 → 浅红
+                3 -> 2      // 深红 → 中红
+                4 -> 3      // 最深红 → 深红
+                5 -> 6      // 浅绿 → 深绿
+                6 -> 6      // 深绿保持
                 else -> currentLevel
             }
         } else {
-            // 做错：逐级变深
             when (currentLevel) {
-                0, 5, 6 -> 1  // 灰色/绿色 → 浅红
+                0, 5, 6 -> 1  // 灰色/浅绿/深绿 → 浅红
                 1 -> 2        // 浅红 → 中红
                 2 -> 3        // 中红 → 深红
                 3 -> 4        // 深红 → 最深红
