@@ -74,7 +74,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Gson for JSON serialization
-    implementation(libs.gson)
+    implementation("com.google.code.gson:gson:2.10.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
