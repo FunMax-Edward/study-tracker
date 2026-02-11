@@ -15,9 +15,9 @@ RepoType: git
 Repo: https://github.com/FunMax-Edward/study-tracker.git
 
 Builds:
-  - versionName: 1.0.0
-    versionCode: 1
-    commit: b75b440bb908b1196f6ab5c71f5809e71ec39b17
+  - versionName: 1.0.2
+    versionCode: 3
+    commit: 61d3289abd10d0970dab6ae7fd84b3721d75ca5f
     subdir: app
     gradle:
       - yes
