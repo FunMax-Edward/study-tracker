@@ -1,1 +1,1 @@
-A simple and clean study progress tracker built with Jetpack Compose
+A simple and clean study progress tracker built with Jetpack Compose.

@@ -48,7 +48,7 @@ data class Problem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val unitId: Int,
     val problemIndex: Int,
-    val proficiencyLevel: Int = 0 // 0=灰色, 1=浅红, 2=中红, 3=深红, 4=最深红, 5=浅绿, 6=深绿
+    val proficiencyLevel: Int = 0
 )
 
 @Entity(
@@ -68,4 +68,13 @@ data class PracticeRecord(
     val problemId: Int,
     val isCorrect: Boolean,
     val timestamp: Long = System.currentTimeMillis()
+)
+
+data class ExportData(
+    val version: Int = 1,
+    val exportedAt: Long = System.currentTimeMillis(),
+    val projects: List<Project>,
+    val studyUnits: List<StudyUnit>,
+    val problems: List<Problem>,
+    val practiceRecords: List<PracticeRecord>
 )

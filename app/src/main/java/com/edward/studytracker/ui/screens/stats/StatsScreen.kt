@@ -140,9 +140,6 @@ fun StatsScreen(
             StreakCard(streakDays = streakDays)
             
             Spacer(modifier = Modifier.height(24.dp))
-            
-            // 单元列表
-            UnitsListSection(units = units)
         }
     }
 }
@@ -453,68 +450,6 @@ private fun StreakCard(streakDays: Int) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun UnitsListSection(units: List<StudyUnit>) {
-    Column {
-        Text(
-            text = "单元详情",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-        
-        units.forEach { unit ->
-            UnitStatItem(unit = unit)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-}
-
-@Composable
-private fun UnitStatItem(unit: StudyUnit) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp)),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = unit.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = "${unit.problemCount} 题",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            // 进度指示
-            val progress = (0..unit.problemCount).random() // 模拟进度
-            val progressPercent = if (unit.problemCount > 0) {
-                (progress.toFloat() / unit.problemCount * 100).toInt()
-            } else 0
-            
-            Text(
-                text = "$progressPercent%",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Medium
-            )
         }
     }
 }

@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +23,7 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
 sealed class Screen(val route: String) {
     data object Home : Screen("home")
     data object UnitDetail : Screen("unit/{unitId}/{unitName}/{projectId}") {
-        fun createRoute(unitId: Int, unitName: String, projectId: Int) = 
+        fun createRoute(unitId: Int, unitName: String, projectId: Int) =
             "unit/$unitId/${java.net.URLEncoder.encode(unitName, "UTF-8")}/$projectId"
     }
     data object Settings : Screen("settings")
@@ -92,14 +92,14 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    
+
     val database = remember { AppDatabase.getDatabase(context) }
     val repository = remember { ProjectRepository(database) }
     val prefs = remember { PreferencesManager(context) }
-    
+
     val projects by repository.getAllProjects().collectAsState(initial = emptyList())
     var currentProject by remember { mutableStateOf<Project?>(null) }
-    
+
     LaunchedEffect(projects) {
         val savedId = prefs.currentProjectId
         currentProject = if (savedId != -1) {
@@ -107,16 +107,16 @@ fun AppNavigation() {
         } else {
             projects.firstOrNull()
         }
-        
+
         if (currentProject == null && projects.isNotEmpty()) {
             currentProject = projects.first()
             prefs.currentProjectId = currentProject!!.id
         }
     }
-    
+
     val currentProjectId = currentProject?.id ?: -1
     val units by repository.getUnitsForProject(currentProjectId).collectAsState(initial = emptyList())
-    
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -225,7 +225,7 @@ fun AppNavigation() {
                 }
             }
         }
-        
+
         composable(
             route = Screen.UnitDetail.route,
             arguments = listOf(
@@ -238,9 +238,9 @@ fun AppNavigation() {
             val unitName = try {
                 java.net.URLDecoder.decode(backStackEntry.arguments?.getString("unitName") ?: "", "UTF-8")
             } catch (e: Exception) { "Unit" }
-            
+
             val problems = repository.getProblemsForUnit(unitId).collectAsState(initial = emptyList()).value
-            
+
             UnitDetailScreen(
                 unitName = unitName,
                 problems = problems,
@@ -252,35 +252,24 @@ fun AppNavigation() {
                 }
             )
         }
-        
+
         composable(Screen.Settings.route) {
             SettingsScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack() },
+                repository = repository
             )
         }
-        
+
         composable(
             route = Screen.Stats.route,
             arguments = listOf(
                 navArgument("projectId") { type = NavType.IntType }
-            ),
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -300 },
-                    animationSpec = tween(300)
-                ) + fadeIn(animationSpec = tween(300))
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { 300 },
-                    animationSpec = tween(300)
-                ) + fadeOut(animationSpec = tween(300))
-            }
+            )
         ) { backStackEntry ->
             val projectId = backStackEntry.arguments?.getInt("projectId") ?: return@composable
             val project = projects.find { it.id == projectId }
             val projectUnits = units.filter { it.projectId == projectId }
-            
+
             StatsScreen(
                 projectName = project?.name ?: "统计",
                 units = projectUnits,
@@ -293,11 +282,34 @@ fun AppNavigation() {
 }
 
 @Composable
+private fun LoadingScreen(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(32.dp)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(48.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
+@Composable
 fun EmptyProjectScreen(
     onCreateProject: (String) -> Unit
 ) {
     var showDialog by remember { mutableStateOf(true) }
-    
+
     if (showDialog) {
         CreateFirstProjectDialog(
             onDismiss = { showDialog = false },
@@ -365,7 +377,7 @@ private fun CreateFirstProjectDialog(
     onConfirm: (String) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
-    
+
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
