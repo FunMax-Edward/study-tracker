@@ -13,6 +13,7 @@ AutoName: study tracker
 
 RepoType: git
 Repo: https://github.com/FunMax-Edward/study-tracker.git
+Binaries: https://github.com/FunMax-Edward/study-tracker/releases/download/v%v/app-release.apk
 
 Builds:
   - versionName: 1.0.2
@@ -26,8 +27,8 @@ AllowedAPKSigningKeys: eb8f525f275d96a249c451aa46c802d104995224eeeed31ae30a3ba1b
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 1.0.0
-CurrentVersionCode: 1
+CurrentVersion: 1.0.2
+CurrentVersionCode: 3
 """
 
 file_path = "metadata/com.edward.studytracker.yml"

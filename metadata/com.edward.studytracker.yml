@@ -9,6 +9,7 @@ AutoName: study tracker
 
 RepoType: git
 Repo: https://github.com/FunMax-Edward/study-tracker.git
+Binaries: https://github.com/FunMax-Edward/study-tracker/releases/download/v%v/app-release.apk
 
 Builds:
   - versionName: 1.0.2
@@ -17,7 +18,6 @@ Builds:
     subdir: app
     gradle:
       - yes
-    Binaries: https://github.com/FunMax-Edward/study-tracker/releases/download/v1.0.2/app-release.apk
 
 AllowedAPKSigningKeys: eb8f525f275d96a249c451aa46c802d104995224eeeed31ae30a3ba1b374d4c8
 
