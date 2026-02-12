@@ -17,10 +17,11 @@ Builds:
     subdir: app
     gradle:
       - yes
+    Binaries: https://github.com/FunMax-Edward/study-tracker/releases/download/v1.0.2/app-release.apk
 
 AllowedAPKSigningKeys: eb8f525f275d96a249c451aa46c802d104995224eeeed31ae30a3ba1b374d4c8
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
-CurrentVersion: 1.0.0
-CurrentVersionCode: 1
+CurrentVersion: 1.0.2
+CurrentVersionCode: 3
