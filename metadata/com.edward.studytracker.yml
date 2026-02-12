@@ -1,0 +1,27 @@
+Categories:
+  - Science & Education
+License: Apache-2.0
+WebSite: https://github.com/FunMax-Edward/study-tracker
+SourceCode: https://github.com/FunMax-Edward/study-tracker
+IssueTracker: https://github.com/FunMax-Edward/study-tracker/issues
+
+AutoName: study tracker
+
+RepoType: git
+Repo: https://github.com/FunMax-Edward/study-tracker.git
+Binaries: https://github.com/FunMax-Edward/study-tracker/releases/download/v%v/app-release.apk
+
+Builds:
+  - versionName: 1.0.2
+    versionCode: 3
+    commit: 61d3289abd10d0970dab6ae7fd84b3721d75ca5f
+    subdir: app
+    gradle:
+      - yes
+
+AllowedAPKSigningKeys: eb8f525f275d96a249c451aa46c802d104995224eeeed31ae30a3ba1b374d4c8
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.2
+CurrentVersionCode: 3
