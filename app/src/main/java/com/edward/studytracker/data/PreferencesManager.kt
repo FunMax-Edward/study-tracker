@@ -8,9 +8,14 @@ class PreferencesManager(context: Context) {
 
     companion object {
         private const val KEY_CURRENT_PROJECT_ID = "current_project_id"
+        private const val KEY_LANGUAGE = "language"
     }
 
     var currentProjectId: Int
         get() = prefs.getInt(KEY_CURRENT_PROJECT_ID, -1)
         set(value) = prefs.edit().putInt(KEY_CURRENT_PROJECT_ID, value).apply()
+
+    var language: String
+        get() = prefs.getString(KEY_LANGUAGE, "system") ?: "system"
+        set(value) = prefs.edit().putString(KEY_LANGUAGE, value).apply()
 }

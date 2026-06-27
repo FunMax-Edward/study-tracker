@@ -1,6 +1,8 @@
 package com.edward.studytracker.ui.screens.settings
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.net.Uri
 import android.text.format.DateFormat
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -46,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -73,6 +77,8 @@ fun SettingsScreen(
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val prefs = remember { PreferencesManager(context) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
@@ -156,6 +162,25 @@ fun SettingsScreen(
                             onCheckedChange = { darkModeEnabled = it }
                         )
                     }
+                )
+
+                Divider(
+                    modifier = Modifier.padding(start = 56.dp),
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                )
+
+                val currentLanguageLabel = when (prefs.language) {
+                    "system" -> stringResource(R.string.settings_language_system)
+                    "en" -> stringResource(R.string.settings_language_en)
+                    "zh" -> stringResource(R.string.settings_language_zh)
+                    else -> prefs.language
+                }
+
+                SettingsItem(
+                    iconPainter = painterResource(R.drawable.ic_translate),
+                    title = stringResource(R.string.settings_language),
+                    subtitle = currentLanguageLabel,
+                    onClick = { showLanguageDialog = true }
                 )
             }
 
@@ -336,6 +361,58 @@ fun SettingsScreen(
             }
         )
     }
+
+    if (showLanguageDialog) {
+        val languages = listOf("system", "en", "zh")
+        AlertDialog(
+            onDismissRequest = { showLanguageDialog = false },
+            title = { Text(stringResource(R.string.settings_language)) },
+            text = {
+                Column {
+                    languages.forEach { lang ->
+                        val text = when (lang) {
+                            "system" -> stringResource(R.string.settings_language_system)
+                            "en" -> stringResource(R.string.settings_language_en)
+                            "zh" -> stringResource(R.string.settings_language_zh)
+                            else -> lang
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    showLanguageDialog = false
+                                    if (prefs.language != lang) {
+                                        prefs.language = lang
+                                        context.findActivity()?.recreate()
+                                    }
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            androidx.compose.material3.RadioButton(
+                                selected = (prefs.language == lang),
+                                onClick = {
+                                    showLanguageDialog = false
+                                    if (prefs.language != lang) {
+                                        prefs.language = lang
+                                        context.findActivity()?.recreate()
+                                    }
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = text, style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showLanguageDialog = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
 }
 
 private fun buildExportFileName(): String {
@@ -395,7 +472,8 @@ private fun SettingsSection(
 
 @Composable
 private fun SettingsItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector?,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
+    iconPainter: androidx.compose.ui.graphics.painter.Painter? = null,
     title: String,
     subtitle: String,
     onClick: () -> Unit,
@@ -411,6 +489,14 @@ private fun SettingsItem(
         if (icon != null) {
             Icon(
                 imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+        } else if (iconPainter != null) {
+            Icon(
+                painter = iconPainter,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
@@ -435,4 +521,10 @@ private fun SettingsItem(
 
         trailing?.invoke()
     }
+}
+
+private fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

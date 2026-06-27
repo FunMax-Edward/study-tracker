@@ -231,8 +231,13 @@ private fun CalendarView(
                         contentDescription = stringResource(R.string.statistics_previous_month)
                     )
                 }
+                val pattern = stringResource(R.string.year_month_pattern)
+                val monthYearStr = remember(currentYearMonth, pattern) {
+                    val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+                    sdf.format(currentYearMonth.time)
+                }
                 Text(
-                    text = "${year}年 ${month + 1}月",
+                    text = monthYearStr,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -251,7 +256,15 @@ private fun CalendarView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                listOf("日", "一", "二", "三", "四", "五", "六").forEach { day ->
+                listOf(
+                    stringResource(R.string.day_sunday),
+                    stringResource(R.string.day_monday),
+                    stringResource(R.string.day_tuesday),
+                    stringResource(R.string.day_wednesday),
+                    stringResource(R.string.day_thursday),
+                    stringResource(R.string.day_friday),
+                    stringResource(R.string.day_saturday)
+                ).forEach { day ->
                     Text(
                         text = day,
                         style = MaterialTheme.typography.bodySmall,

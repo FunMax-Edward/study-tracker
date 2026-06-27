@@ -133,21 +133,21 @@ class ProjectRepository(private val database: AppDatabase) {
         runCatching {
             val importData = try {
                 gson.fromJson(json, ExportData::class.java)
-                    ?: throw IllegalArgumentException("数据为空")
+                    ?: throw IllegalArgumentException("Data is empty")
             } catch (e: JsonParseException) {
-                throw IllegalArgumentException("JSON 格式无效", e)
+                throw IllegalArgumentException("Invalid JSON format", e)
             } catch (e: IllegalStateException) {
-                throw IllegalArgumentException("JSON 内容异常", e)
+                throw IllegalArgumentException("Invalid JSON content", e)
             }
 
             if (importData.version <= 0) {
-                throw IllegalArgumentException("不支持的数据版本")
+                throw IllegalArgumentException("Unsupported data version")
             }
 
-            val projects = requireNotNull(importData.projects) { "数据缺少项目列表" }
-            val studyUnits = requireNotNull(importData.studyUnits) { "数据缺少单元列表" }
-            val problems = requireNotNull(importData.problems) { "数据缺少题目列表" }
-            val practiceRecords = requireNotNull(importData.practiceRecords) { "数据缺少练习记录" }
+            val projects = requireNotNull(importData.projects) { "Data is missing project list" }
+            val studyUnits = requireNotNull(importData.studyUnits) { "Data is missing unit list" }
+            val problems = requireNotNull(importData.problems) { "Data is missing problem list" }
+            val practiceRecords = requireNotNull(importData.practiceRecords) { "Data is missing practice records" }
 
             database.withTransaction {
                 practiceRecordDao.deleteAllPracticeRecords()

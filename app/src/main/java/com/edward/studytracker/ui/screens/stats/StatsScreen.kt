@@ -246,7 +246,7 @@ private fun MonthlyHeatmapSection(
                     )
                 }
                 Text(
-                    text = yearMonth.format(DateTimeFormatter.ofPattern("yyyy年 M月", Locale.CHINESE)),
+                    text = yearMonth.format(DateTimeFormatter.ofPattern(stringResource(R.string.year_month_pattern), Locale.getDefault())),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium
                 )
@@ -262,8 +262,15 @@ private fun MonthlyHeatmapSection(
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        // 星期标签
-        val weekDays = listOf("日", "一", "二", "三", "四", "五", "六")
+        val weekDays = listOf(
+            stringResource(R.string.day_sunday),
+            stringResource(R.string.day_monday),
+            stringResource(R.string.day_tuesday),
+            stringResource(R.string.day_wednesday),
+            stringResource(R.string.day_thursday),
+            stringResource(R.string.day_friday),
+            stringResource(R.string.day_saturday)
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly

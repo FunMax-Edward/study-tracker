@@ -41,6 +41,10 @@
     <string name="section_appearance">外观</string>
     <string name="settings_dark_mode">深色模式</string>
     <string name="settings_follow_system">跟随系统</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_language_system">跟随系统</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_zh">简体中文</string>
     <string name="section_notifications">通知</string>
     <string name="settings_study_reminder">学习提醒</string>
     <string name="settings_daily_reminder">每日学习提醒</string>
@@ -106,4 +110,13 @@
     <string name="unitdetail_result_prompt">这次的结果是：</string>
     <string name="unitdetail_correct">正确</string>
     <string name="unitdetail_wrong">错误</string>
+
+    <string name="year_month_pattern">yyyy年 M月</string>
+    <string name="day_sunday">日</string>
+    <string name="day_monday">一</string>
+    <string name="day_tuesday">二</string>
+    <string name="day_wednesday">三</string>
+    <string name="day_thursday">四</string>
+    <string name="day_friday">五</string>
+    <string name="day_saturday">六</string>
 </resources>

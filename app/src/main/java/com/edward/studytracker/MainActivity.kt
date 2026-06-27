@@ -1,5 +1,6 @@
 package com.edward.studytracker
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,10 +61,16 @@ import com.edward.studytracker.ui.screens.settings.SettingsScreen
 import com.edward.studytracker.ui.screens.stats.StatsScreen
 import com.edward.studytracker.ui.screens.unitdetail.UnitDetailScreen
 import com.edward.studytracker.ui.theme.StudyTrackerTheme
+import com.edward.studytracker.utils.LocaleHelper
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = PreferencesManager(newBase)
+        super.attachBaseContext(LocaleHelper.wrap(newBase, prefs.language))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -272,7 +279,7 @@ fun AppNavigation() {
             val projectUnits = units.filter { it.projectId == projectId }
 
             StatsScreen(
-                projectName = project?.name ?: "统计",
+                projectName = project?.name ?: stringResource(R.string.stats_title),
                 units = projectUnits,
                 projectId = projectId,
                 repository = repository,
